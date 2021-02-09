@@ -1,7 +1,5 @@
 "use strict";
 
-const { slice } = require("core-js/fn/array");
-
 window.addEventListener('DOMContentLoaded', () => {
     //Tabs
 
@@ -266,83 +264,42 @@ window.addEventListener('DOMContentLoaded', () => {
 
     //Slider
 
-    const slide = document.querySelectorAll('.offer__slide'),
-          currentNum = document.querySelector('#current'),
+    const slides = document.querySelectorAll('.offer__slide'),
+          current = document.querySelector('#current'),
+          total = document.querySelector('#total'),
           prev = document.querySelector('.offer__slider-prev'),
           next = document.querySelector('.offer__slider-next');
+    let indexSlide = 1;
 
-    let count = 1;
+    showSlides(indexSlide);
 
-    function makeCurrent(current) {
-        currentNum.textContent = makeZero(current);
-    }
-
-    function hideSlides() {
-        slide.forEach(item => {
-            item.classList.add('hide');
-        });
-    }
-
-    function showSlide(i = 0) {
-        slide[i].classList.remove('hide');
-        slide[i].classList.add('show');
-    }
-
-    next.addEventListener('click', (e) => {
-        hideSlides();
-        showNextSlide();
-        
-        function showNextSlide() {
-            function nextNumber() {
-                count++;
-                if(count > 4) {
-                    count = 1;
-                }
-                makeCurrent(count);
-            }
-
-            function nextSlide() {
-                slide.forEach((item, i) => {
-                    if(count == i + 1) {
-                        showSlide(i);
-                    }
-                });
-            }
-            
-            nextNumber();
-            nextSlide();
+    function showSlides(n) {
+        if(n > slides.length) {
+            indexSlide = 1;
         }
-        
+
+        if(n < 1) {
+            indexSlide = slides.length;
+        }
+
+        slides.forEach(item => item.classList.add('hide'));
+        slides[indexSlide - 1].classList.remove('hide');
+        slides[indexSlide - 1].classList.add('show');
+
+        current.textContent = makeZero(indexSlide);
+        total.textContent = makeZero(slides.length);
+    }
+
+    function plusSlide(n) {
+        showSlides(indexSlide += n);
+    }
+
+    prev.addEventListener('click', () => {
+        plusSlide(-1);
     });
 
-    prev.addEventListener('click', (e) => {
-        hideSlides();
-        showPrevSlide();
-    
-        function showPrevSlide() {
-            function prevNumber() {
-                count--;
-                if(count <= 0) {
-                    count = 4;
-                }
-                makeCurrent(count);
-            }
-
-            function prevSlide() {
-                slide.forEach((item, i) => {
-                    i++;
-                    if(count == i) {
-                        showSlide(i - 1);
-                    }
-                });
-            }
-
-            prevNumber();
-            prevSlide();
-        }
+    next.addEventListener('click', () => {
+        plusSlide(1);
     });
     
-    makeCurrent(count);
-    hideSlides();
-    showSlide();
 });
