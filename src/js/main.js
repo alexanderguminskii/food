@@ -1,5 +1,7 @@
 "use strict";
 
+const { slice } = require("core-js/fn/array");
+
 window.addEventListener('DOMContentLoaded', () => {
     //Tabs
 
@@ -261,4 +263,86 @@ window.addEventListener('DOMContentLoaded', () => {
     }
 
     setTimer(deadLine);
+
+    //Slider
+
+    const slide = document.querySelectorAll('.offer__slide'),
+          currentNum = document.querySelector('#current'),
+          prev = document.querySelector('.offer__slider-prev'),
+          next = document.querySelector('.offer__slider-next');
+
+    let count = 1;
+
+    function makeCurrent(current) {
+        currentNum.textContent = makeZero(current);
+    }
+
+    function hideSlides() {
+        slide.forEach(item => {
+            item.classList.add('hide');
+        });
+    }
+
+    function showSlide(i = 0) {
+        slide[i].classList.remove('hide');
+        slide[i].classList.add('show');
+    }
+
+    next.addEventListener('click', (e) => {
+        hideSlides();
+        showNextSlide();
+        
+        function showNextSlide() {
+            function nextNumber() {
+                count++;
+                if(count > 4) {
+                    count = 1;
+                }
+                makeCurrent(count);
+            }
+
+            function nextSlide() {
+                slide.forEach((item, i) => {
+                    if(count == i + 1) {
+                        showSlide(i);
+                    }
+                });
+            }
+            
+            nextNumber();
+            nextSlide();
+        }
+        
+    });
+
+    prev.addEventListener('click', (e) => {
+        hideSlides();
+        showPrevSlide();
+    
+        function showPrevSlide() {
+            function prevNumber() {
+                count--;
+                if(count <= 0) {
+                    count = 4;
+                }
+                makeCurrent(count);
+            }
+
+            function prevSlide() {
+                slide.forEach((item, i) => {
+                    i++;
+                    if(count == i) {
+                        showSlide(i - 1);
+                    }
+                });
+            }
+
+            prevNumber();
+            prevSlide();
+        }
+    });
+    
+    makeCurrent(count);
+    hideSlides();
+    showSlide();
 });
