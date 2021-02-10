@@ -264,112 +264,69 @@ window.addEventListener('DOMContentLoaded', () => {
 
     //Slider
 
-    const slides = document.querySelectorAll('.offer__slide'),
-          current = document.querySelector('#current'),
-          total = document.querySelector('#total'),
-          prev = document.querySelector('.offer__slider-prev'),
+    const slideWrapper = document.querySelector('.offer__slider-wrapper'),
+          slideField = slideWrapper.querySelector('.offer__slider-inner'),
+          slides = slideWrapper.querySelectorAll('.offer__slide'),
           next = document.querySelector('.offer__slider-next'),
-          slideWrapper = document.querySelector('.offer__slider-wrapper'),
-          slideField = document.querySelector('.offer__slider-inner'),
-          width = window.getComputedStyle(slideWrapper).width;
-    let indexSlide = 1;
-    let offset = 0;
+          prev = document.querySelector('.offer__slider-prev'),
+          width = window.getComputedStyle(slideWrapper).width,
+          current = document.querySelector('#current'),
+          total = document.querySelector('#total');
 
+    let slideIndex = 1,
+        offset = 0;
 
-    slideField.style.width = 100 * slides.length + `%`;
-    slideField.style.display = 'flex';
-    slideField.style.transition = '0.5s all';
-    slideWrapper.style.overflow = 'hidden';
-
-    slides.forEach(slide => {
-        slide.style.width = width;
-    });
-
-    if(slides.length < 10) {
-        total.textContent = `0${slides.length}`;
-        current.textContent = `0${indexSlide}`;
-    } else {
-        total.textContent = slides.length;
-        current.textContent = indexSlide;
+    function makeSlideZero() {
+        if(slideIndex < 10) {
+            current.textContent = `0${slideIndex}`;
+            total.textContent = `0${slides.length}`;
+        } else {
+            current.textContent = slideIndex;
+            total.textContent = slides.length;
+        }
     }
 
+    slideField.style.width = 100 * slides.length + '%';
+    slideField.style.display = 'flex';
+    slideField.style.transition = '0.5s all';
+    
+    slideWrapper.style.overflow = 'hidden';
+
     next.addEventListener('click', () => {
-        if(offset == (slides.length - 1) * +width.slice(0, width.length - 2)) {
-           offset = 0;
+        if(offset == +width.slice(0, width.length - 2) * (slides.length - 1)) {
+            offset = 0;
         } else {
             offset += +width.slice(0, width.length - 2);
         }
-        
         slideField.style.transform = `translateX(-${offset}px)`;
 
-        if(indexSlide == slides.length) {
-            indexSlide = 1;
-        } else {
-            indexSlide++;
-        }
 
-        if(slides.length < 10) {
-            current.textContent = `0${indexSlide}`;
+        if(slideIndex == slides.length) {
+            slideIndex = 1;
+            makeSlideZero();
         } else {
-            current.textContent = indexSlide;
+            slideIndex++;
+            makeSlideZero();
         }
     });
 
     prev.addEventListener('click', () => {
         if(offset == 0) {
-           offset = (slides.length - 1) * +width.slice(0, width.length - 2);
+            offset = +width.slice(0, width.length - 2) * (slides.length - 1);
         } else {
             offset -= +width.slice(0, width.length - 2);
         }
-        
         slideField.style.transform = `translateX(-${offset}px)`;
 
-        if(indexSlide == 1) {
-            indexSlide = slides.length;
+        if(slideIndex == 1) {
+            slideIndex = slides.length;
+            makeSlideZero();
         } else {
-            indexSlide--;
-        }
-
-        if(slides.length < 10) {
-            current.textContent = `0${indexSlide}`;
-        } else {
-            current.textContent = indexSlide;
+            slideIndex--;
+            makeSlideZero();
         }
     });
 
+    makeSlideZero();
 
-    /* showSlides(indexSlide);
-    
-    function showSlides(n) {
-        if(n > slides.length) {
-            indexSlide = 1;
-        }
-
-        if(n < 1) {
-            indexSlide = slides.length;
-        }
-
-        slides.forEach(item => {
-            item.classList.add('hide');
-            item.classList.remove('show');
-        });
-
-        slides[indexSlide - 1].classList.remove('hide');
-        slides[indexSlide - 1].classList.add('show');
-
-        current.textContent = makeZero(indexSlide);
-        total.textContent = makeZero(slides.length);
-    }
-
-    function plusIndex(n) {
-        showSlides(indexSlide += n);
-    }
-
-    next.addEventListener('click', () => {
-        plusIndex(1);
-    });
-
-    prev.addEventListener('click', () => {
-        plusIndex(-1);
-    }); */
 });
