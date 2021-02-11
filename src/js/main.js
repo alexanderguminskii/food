@@ -271,11 +271,15 @@ window.addEventListener('DOMContentLoaded', () => {
           prev = document.querySelector('.offer__slider-prev'),
           width = window.getComputedStyle(slideWrapper).width,
           current = document.querySelector('#current'),
-          total = document.querySelector('#total');
+          total = document.querySelector('#total'),
+          dotsWrapper = document.querySelector('.offer__slider-indicators'); 
+
 
     let slideIndex = 1,
-        offset = 0;
-
+        offset = 0,
+        countDots = 0,
+        dotsArr = [];
+    
     function makeSlideZero() {
         if(slideIndex < 10) {
             current.textContent = `0${slideIndex}`;
@@ -292,7 +296,24 @@ window.addEventListener('DOMContentLoaded', () => {
     
     slideWrapper.style.overflow = 'hidden';
 
-    next.addEventListener('click', () => {
+    slides.forEach(() => countDots++);
+
+    function makeDots() {
+        for(let i = 0; i < countDots; i++) {
+            const dot = document.createElement('div');
+    
+            dot.classList.add('dot');
+            dotsWrapper.append(dot);
+    
+            dotsArr[i] = dot;
+        }
+    }
+
+    makeDots();
+
+    dotsArr[slideIndex - 1].style.backgroundColor = 'rgb(51, 193, 236)';
+
+    next.addEventListener('click', (e) => {
         if(offset == +width.slice(0, width.length - 2) * (slides.length - 1)) {
             offset = 0;
         } else {
@@ -308,6 +329,9 @@ window.addEventListener('DOMContentLoaded', () => {
             slideIndex++;
             makeSlideZero();
         }
+
+        dotsArr.forEach(dot => dot.style.backgroundColor = '#fff');
+        dotsArr[slideIndex - 1].style.backgroundColor = 'rgb(51, 193, 236)';
     });
 
     prev.addEventListener('click', () => {
@@ -325,8 +349,29 @@ window.addEventListener('DOMContentLoaded', () => {
             slideIndex--;
             makeSlideZero();
         }
+
+        dotsArr.forEach(dot => dot.style.backgroundColor = '#fff');
+        dotsArr[slideIndex - 1].style.backgroundColor = 'rgb(51, 193, 236)';
+    });
+
+    dotsWrapper.addEventListener('click', (e) => {
+        const target = e.target;
+        if(target.className === 'dot') {        
+            dotsArr.forEach((dot, i) => {
+                if(dot === target) {     
+                    offset = +width.slice(0, width.length - 2) * i;
+                    slideField.style.transform = `translateX(-${offset}px)`;
+                    
+                    dotsArr.forEach(dot => dot.style.backgroundColor = '#fff');
+                    dotsArr[i].style.backgroundColor = 'rgb(51, 193, 236)';
+
+                    slideIndex = i + 1;
+                    makeSlideZero();
+                }
+            });
+        }
     });
 
     makeSlideZero();
-
+    
 });
