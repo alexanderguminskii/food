@@ -290,6 +290,15 @@ window.addEventListener('DOMContentLoaded', () => {
         }
     }
 
+    function dotsColor(dots) {
+        dots.forEach(dot => dot.style.backgroundColor = '#fff');
+        dots[slideIndex - 1].style.backgroundColor = 'rgb(51, 193, 236)';
+    }
+
+    function onlyNumbers(str) {
+        return +str.replace(/\D/g, '');
+    }
+
     slideField.style.width = 100 * slides.length + '%';
     slideField.style.display = 'flex';
     slideField.style.transition = '0.5s all';
@@ -314,10 +323,10 @@ window.addEventListener('DOMContentLoaded', () => {
     dotsArr[slideIndex - 1].style.backgroundColor = 'rgb(51, 193, 236)';
 
     next.addEventListener('click', (e) => {
-        if(offset == +width.slice(0, width.length - 2) * (slides.length - 1)) {
+        if(offset == onlyNumbers(width) * (slides.length - 1)) {
             offset = 0;
         } else {
-            offset += +width.slice(0, width.length - 2);
+            offset += onlyNumbers(width);
         }
         slideField.style.transform = `translateX(-${offset}px)`;
 
@@ -330,15 +339,14 @@ window.addEventListener('DOMContentLoaded', () => {
             makeSlideZero();
         }
 
-        dotsArr.forEach(dot => dot.style.backgroundColor = '#fff');
-        dotsArr[slideIndex - 1].style.backgroundColor = 'rgb(51, 193, 236)';
+        dotsColor(dotsArr);
     });
 
     prev.addEventListener('click', () => {
         if(offset == 0) {
-            offset = +width.slice(0, width.length - 2) * (slides.length - 1);
+            offset = onlyNumbers(width) * (slides.length - 1);
         } else {
-            offset -= +width.slice(0, width.length - 2);
+            offset -= onlyNumbers(width);
         }
         slideField.style.transform = `translateX(-${offset}px)`;
 
@@ -350,8 +358,7 @@ window.addEventListener('DOMContentLoaded', () => {
             makeSlideZero();
         }
 
-        dotsArr.forEach(dot => dot.style.backgroundColor = '#fff');
-        dotsArr[slideIndex - 1].style.backgroundColor = 'rgb(51, 193, 236)';
+        dotsColor(dotsArr);
     });
 
     dotsWrapper.addEventListener('click', (e) => {
@@ -359,7 +366,7 @@ window.addEventListener('DOMContentLoaded', () => {
         if(target.className === 'dot') {        
             dotsArr.forEach((dot, i) => {
                 if(dot === target) {     
-                    offset = +width.slice(0, width.length - 2) * i;
+                    offset = onlyNumbers(width) * i;
                     slideField.style.transform = `translateX(-${offset}px)`;
                     
                     dotsArr.forEach(dot => dot.style.backgroundColor = '#fff');
