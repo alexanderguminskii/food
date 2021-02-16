@@ -2323,6 +2323,34 @@ window.addEventListener('DOMContentLoaded', () => {
   const result = document.querySelector('.calculating__result span');
   let sex, height, weight, age, ratio;
 
+  if (!localStorage.getItem('sex')) {
+    sex = 'female';
+    localStorage.setItem('sex', sex);
+  }
+
+  if (!localStorage.getItem('ratio')) {
+    ratio = '1.375';
+    localStorage.setItem('ratio', ratio);
+  }
+
+  function initLocalSetings(selector, activeClass) {
+    const elements = document.querySelectorAll(`${selector} div`);
+    elements.forEach(element => {
+      element.classList.remove(activeClass);
+
+      if (element.getAttribute('id') == localStorage.getItem('sex')) {
+        element.classList.add(activeClass);
+      }
+
+      if (element.getAttribute('data-ratio') == localStorage.getItem('ratio')) {
+        element.classList.add(activeClass);
+      }
+    });
+  }
+
+  initLocalSetings('#gender', 'calculating__choose-item_active');
+  initLocalSetings('.calculating__choose_big', 'calculating__choose-item_active');
+
   function totalCalc() {
     if (!sex || !height || !weight || !age || !ratio) {
       result.textContent = '----';
@@ -2344,8 +2372,10 @@ window.addEventListener('DOMContentLoaded', () => {
       element.addEventListener('click', e => {
         if (e.target.getAttribute('data-ratio')) {
           ratio = +e.target.getAttribute('data-ratio');
+          localStorage.setItem('ratio', ratio);
         } else {
           sex = e.target.getAttribute('id');
+          localStorage.setItem('sex', sex);
         }
 
         elements.forEach(element => element.classList.remove(activeClass));
@@ -2361,6 +2391,12 @@ window.addEventListener('DOMContentLoaded', () => {
   function getDynamicInformation(selector) {
     const input = document.querySelector(selector);
     input.addEventListener('input', () => {
+      if (input.value.match(/\D/g)) {
+        input.style.border = '1px solid red';
+      } else {
+        input.style.border = '';
+      }
+
       switch (input.getAttribute('id')) {
         case 'height':
           height = +input.value;
