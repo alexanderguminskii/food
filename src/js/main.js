@@ -384,7 +384,6 @@ window.addEventListener('DOMContentLoaded', () => {
     //Calc
 
     const result = document.querySelector('.calculating__result span');
-
     let sex, height, weight, age, ratio;
 
     if(!localStorage.getItem('sex')) {
@@ -393,32 +392,32 @@ window.addEventListener('DOMContentLoaded', () => {
     }
 
     if(!localStorage.getItem('ratio')) {
-        ratio = '1.375';
+        ratio = 1.375;
         localStorage.setItem('ratio', ratio);
     }
 
     function initLocalSetings(selector, activeClass) {
-        const elements = document.querySelectorAll(`${selector} div`);
+        const elements = document.querySelectorAll(selector);
 
-        elements.forEach(element => {
-            element.classList.remove(activeClass);
-            if(element.getAttribute('id') == localStorage.getItem('sex')) {
-                element.classList.add(activeClass);
+        elements.forEach(el => {
+            if(localStorage.getItem('sex') === el.getAttribute('id')) {
+                elements.forEach(el => el.classList.remove(activeClass));
+                el.classList.add(activeClass);
             }
 
-            if(element.getAttribute('data-ratio') == localStorage.getItem('ratio')) {
-                element.classList.add(activeClass);
+            if(localStorage.getItem('ratio') === el.getAttribute('data-ratio')) {
+                elements.forEach(el => el.classList.remove(activeClass));
+                el.classList.add(activeClass);
             }
         });
-
     }
 
-    initLocalSetings('#gender', 'calculating__choose-item_active');
-    initLocalSetings('.calculating__choose_big', 'calculating__choose-item_active');
+    initLocalSetings('#gender div','calculating__choose-item_active');
+    initLocalSetings('.calculating__choose_big div', 'calculating__choose-item_active');
 
     function totalCalc() {
         if(!sex || !height || !weight || !age || !ratio) {
-            result.textContent = '----';
+            result.textContent = '---';
             return;
         }
 
@@ -431,41 +430,41 @@ window.addEventListener('DOMContentLoaded', () => {
 
     totalCalc();
 
-    function getStaticInformation(parentSelector, activeClass) {
-        const elements = document.querySelectorAll(`${parentSelector} div`);
+    function getStaticInformation(selector, activeClass) {
+        const elements = document.querySelectorAll(selector);
 
-        elements.forEach(element => {
-            element.addEventListener('click', (e) => {
+        elements.forEach(el => {
+            el.addEventListener('click', (e) => {
                 if(e.target.getAttribute('data-ratio')) {
-                    ratio = + e.target.getAttribute('data-ratio');
+                    ratio = +e.target.getAttribute('data-ratio');
                     localStorage.setItem('ratio', ratio);
                 } else {
                     sex = e.target.getAttribute('id');
                     localStorage.setItem('sex', sex);
                 }
 
-                elements.forEach(element => element.classList.remove(activeClass));
+                elements.forEach(el => el.classList.remove(activeClass));
                 e.target.classList.add(activeClass);
-
+                
                 totalCalc();
             });
         });
     }
 
-    getStaticInformation('#gender', 'calculating__choose-item_active');
-    getStaticInformation('.calculating__choose_big', 'calculating__choose-item_active');
+    getStaticInformation('#gender div','calculating__choose-item_active');
+    getStaticInformation('.calculating__choose_big div', 'calculating__choose-item_active');
 
     function getDynamicInformation(selector) {
         const input = document.querySelector(selector);
 
-        input.addEventListener('input', () => {
+        input.addEventListener('input', (e) => {
             if(input.value.match(/\D/g)) {
                 input.style.border = '1px solid red';
             } else {
-                input.style.border = '';
+                input.style.border = 'none';
             }
 
-            switch(input.getAttribute('id')) {
+            switch(e.target.getAttribute('id')) {
                 case 'height':
                     height = +input.value;
                     break;
@@ -484,5 +483,4 @@ window.addEventListener('DOMContentLoaded', () => {
     getDynamicInformation('#height');
     getDynamicInformation('#weight');
     getDynamicInformation('#age');
-
 });
