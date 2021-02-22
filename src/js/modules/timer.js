@@ -1,6 +1,4 @@
-function timer() {
-
-    const deadLine = new Date('02-28-2021');
+function timer(deadLine) {
 
     function makeZero(num) {
         if(num < 10) {
@@ -11,7 +9,7 @@ function timer() {
     }
 
     function getTimeRemains(endTime) {
-        const total = endTime - (new Date()),
+        const total = Date.parse(endTime) - (new Date()),
               days = Math.round(total / 1000 / 60 / 60 / 24),
               hours = Math.round((total / 1000 / 60 / 60) % 24),
               minutes = Math.round((total / 1000 / 60) % 60),
@@ -52,4 +50,4 @@ function timer() {
     setTimer(deadLine);
 }
 
-module.exports = timer;
+export default timer;

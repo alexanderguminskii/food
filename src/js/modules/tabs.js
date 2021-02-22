@@ -1,23 +1,23 @@
-function tabs() {
+function tabs(tabCantainerSelector, tabsSelector, itemsSelector, activeSelector) {
 
-    const tabContainer = document.querySelector('.tabheader__items'),
-          tab = document.querySelectorAll('.tabheader__item'),
-          items = document.querySelectorAll('.tabcontent');
+    const tabContainer = document.querySelector(tabCantainerSelector),
+          tab = document.querySelectorAll(tabsSelector),
+          items = document.querySelectorAll(itemsSelector);
 
     tabContainer.addEventListener('click', (e) => {
         const target = e.target;
 
 
-        if(target.className === 'tabheader__item') {
+        if(target.className === tabsSelector.slice(1)) {
             tab.forEach((item, i) => {
-                item.classList.remove('tabheader__item_active');
+                item.classList.remove(activeSelector);
                 if(target === item) {
                     hideContent();
                     showContent(i);
                 }
             });
 
-            target.classList.add('tabheader__item_active');
+            target.classList.add(activeSelector);
         }
     });
 
@@ -36,4 +36,4 @@ function tabs() {
     showContent();
 }
 
-module.exports = tabs;
+export default tabs;

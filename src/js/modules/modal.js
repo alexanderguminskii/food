@@ -1,30 +1,36 @@
-function modal() {
+function showModal(modalCalass) {
+    const modal = document.querySelector(modalCalass);
 
-    const modal = document.querySelector('.modal'),
-          btn = document.querySelectorAll('[data-modal]');
-          
-    function showModal() {
-        modal.classList.add('show');
-        document.body.style.cssText = 'overflow: hidden;';
-    }
+    modal.classList.add('show');
+    document.body.style.cssText = 'overflow: hidden;';
+}
 
-    function closeModal() {
-        modal.classList.remove('show');
-        document.body.style.cssText = 'overflow: ;';
-    }
+function closeModal(modalCalass) {
+    const modal = document.querySelector(modalCalass);
 
+    modal.classList.remove('show');
+    document.body.style.cssText = 'overflow: ;';
+}
+
+function modal(modalCalass, modalTriger) {
+
+    const modal = document.querySelector(modalCalass),
+          btn = document.querySelectorAll(modalTriger);
+ 
     btn.forEach(item => {
-        item.addEventListener('click', showModal);
+        item.addEventListener('click', () => showModal(modalCalass));
     });
 
     modal.addEventListener('click', (e) => {
         const target = e.target;
 
         if(target === modal || target.className === 'modal__close') {
-            closeModal();
+            closeModal(modalCalass);
         }
         
     });
 }
 
-module.exports = modal;
+export default modal;
+export {showModal};
+export {closeModal};

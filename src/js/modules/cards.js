@@ -1,3 +1,5 @@
+import {getFromServer} from '../services/services';
+
 function cards() {
     
     class Menu {
@@ -42,12 +44,6 @@ function cards() {
         }
     }
 
-    const getFromServer = async (url) => {
-        const res = await fetch(url);
-
-        return await res.json();
-    };
-
     function getResource() {
         getFromServer('http://localhost:3000/menu')
             .then((data) => {
@@ -60,4 +56,4 @@ function cards() {
     getResource();
 }
 
-module.exports = cards;
+export default cards;

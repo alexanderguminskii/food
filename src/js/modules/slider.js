@@ -1,14 +1,14 @@
-function slider() {
+function slider({slidesSelector, wrapper, field, nextClass, prevClass, totalSlide, currentSlides, dots}) {
 
-    const slideWrapper = document.querySelector('.offer__slider-wrapper'),
-          slideField = slideWrapper.querySelector('.offer__slider-inner'),
-          slides = slideWrapper.querySelectorAll('.offer__slide'),
-          next = document.querySelector('.offer__slider-next'),
-          prev = document.querySelector('.offer__slider-prev'),
+    const slideWrapper = document.querySelector(wrapper),
+          slideField = slideWrapper.querySelector(field),
+          slides = slideWrapper.querySelectorAll(slidesSelector),
+          next = document.querySelector(nextClass),
+          prev = document.querySelector(prevClass),
           width = window.getComputedStyle(slideWrapper).width,
-          current = document.querySelector('#current'),
-          total = document.querySelector('#total'),
-          dotsWrapper = document.querySelector('.offer__slider-indicators'); 
+          current = document.querySelector(currentSlides),
+          total = document.querySelector(totalSlide),
+          dotsWrapper = document.querySelector(dots); 
 
 
     let slideIndex = 1,
@@ -118,4 +118,4 @@ function slider() {
     makeSlideZero();
 }
 
-module.exports = slider;
+export default slider;
