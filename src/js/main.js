@@ -25,4 +25,4 @@ window.addEventListener('DOMContentLoaded', () => {
         wrapper: '.offer__slider-wrapper'
     });
     calculator();
-});
+}); 
